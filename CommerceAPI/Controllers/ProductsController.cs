@@ -46,5 +46,36 @@ namespace CommerceAPI.Controllers
 
             return Ok(productFromMerchant);
         }
+
+        [HttpPut("{productId}")]
+        public ActionResult UpdateProductViaId(int merchantId, int productId, Product product)
+        {
+            var merchantWithProducts = _context.Merchants.Include(merch => merch.Products).FirstOrDefault(merch => merch.Id == merchantId);
+
+            if (merchantWithProducts == null)
+            {
+                return NotFound("Merchant not found");
+            }
+
+            var productFromMerchant = merchantWithProducts.Products.FirstOrDefault(product => product.Id == productId);
+
+            if (merchantWithProducts == null)
+            {
+                return NotFound("Product not found in the specified Merchant");
+            }
+
+            productFromMerchant.Name = product.Name;
+            productFromMerchant.Description = product.Description;
+            productFromMerchant.Category = product.Category;
+            productFromMerchant.Price = product.Price;
+            productFromMerchant.StockQuanity = product.StockQuanity;
+            productFromMerchant.ReleaseDate = product.ReleaseDate;
+            productFromMerchant.MerchantId = merchantId;
+
+            _context.Products.Update(productFromMerchant);
+            _context.SaveChanges();
+
+            return NoContent();
+        }
     }
 }
