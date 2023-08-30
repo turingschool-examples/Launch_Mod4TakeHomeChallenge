@@ -50,7 +50,7 @@ namespace CommerceAPITests.EndpointTests
         }
 
         [Fact]
-        public async void GetProductsById_ReturnsProductWithGivenId()
+        public async void GetProductById_ReturnsProductWithGivenId()
         {
             var context = GetDbContext();
             var client = _factory.CreateClient();

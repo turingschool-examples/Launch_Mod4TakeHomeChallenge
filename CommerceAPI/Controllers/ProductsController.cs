@@ -27,5 +27,21 @@ namespace CommerceAPI.Controllers
             var products = _context.Products.Where(p => p.MerchantId == merchantId);
             return new JsonResult(products.OrderBy(p => p.Id));
         }
+
+        [HttpGet("{productId}")]
+        public ActionResult GetProductById(int merchantId, int productId)
+        {
+            var merchant = _context.Merchants.FirstOrDefault(m => m.Id == merchantId);
+            if (merchant == null)
+            {
+                return NotFound();
+            }
+            var product = _context.Products.Where(p => p.MerchantId == merchantId).FirstOrDefault(p => p.Id == productId);
+            if (product == null)
+            {
+                return NotFound();
+            }
+            return new JsonResult(product);
+        }
     }
 }
