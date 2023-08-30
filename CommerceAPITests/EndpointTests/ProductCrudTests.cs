@@ -36,7 +36,7 @@ namespace CommerceAPITests.EndpointTests
 
             var product1 = new Product { MerchantId = merchant1.Id, Name = "Slim Jims", Description = "Meat Stick", Category = "Snack", PriceInCents = 99, StockQuantity = 100, ReleaseDate = new DateTime(2000, 1, 1, 0, 0, 0).ToUniversalTime() };
             var product2 = new Product { MerchantId = merchant1.Id, Name = "Sweet Tarts", Description = "Sweet and Sour", Category = "Candy", PriceInCents = 149, StockQuantity = 50, ReleaseDate = new DateTime(2000, 1, 1, 0, 0, 0).ToUniversalTime() };
-            var product3 = new Product { MerchantId = merchant1.Id, Name = "Slim Jims", Description = "Meat Stick", Category = "Snack", PriceInCents = 99, StockQuantity = 100, ReleaseDate = new DateTime(2000, 1, 1, 0, 0, 0).ToUniversalTime() };
+            var product3 = new Product { MerchantId = merchant1.Id, Name = "Arizona Iced Tea", Description = "Iced Tea", Category = "Drink", PriceInCents = 99, StockQuantity = 200, ReleaseDate = new DateTime(2000, 1, 1, 0, 0, 0).ToUniversalTime() };
             List<Product> products = new () { product1, product2, product3 };
             context.Products.AddRange(products);
             context.SaveChanges();
@@ -64,7 +64,7 @@ namespace CommerceAPITests.EndpointTests
 
             var product1 = new Product { MerchantId = merchant1.Id, Name = "Slim Jims", Description = "Meat Stick", Category = "Snack", PriceInCents = 99, StockQuantity = 100, ReleaseDate = new DateTime(2000, 1, 1, 0, 0, 0).ToUniversalTime() };
             var product2 = new Product { MerchantId = merchant1.Id, Name = "Sweet Tarts", Description = "Sweet and Sour", Category = "Candy", PriceInCents = 149, StockQuantity = 50, ReleaseDate = new DateTime(2000, 1, 1, 0, 0, 0).ToUniversalTime() };
-            var product3 = new Product { MerchantId = merchant1.Id, Name = "Slim Jims", Description = "Meat Stick", Category = "Snack", PriceInCents = 99, StockQuantity = 100, ReleaseDate = new DateTime(2000, 1, 1, 0, 0, 0).ToUniversalTime() };
+            var product3 = new Product { MerchantId = merchant1.Id, Name = "Arizona Iced Tea", Description = "Iced Tea", Category = "Drink", PriceInCents = 99, StockQuantity = 200, ReleaseDate = new DateTime(2000, 1, 1, 0, 0, 0).ToUniversalTime() };
             List<Product> products = new() { product1, product2, product3 };
             context.Products.AddRange(products);
             context.SaveChanges();
@@ -92,7 +92,7 @@ namespace CommerceAPITests.EndpointTests
 
             var product1 = new Product { MerchantId = merchant1.Id, Name = "Slim Jims", Description = "Meat Stick", Category = "Snack", PriceInCents = 99, StockQuantity = 100, ReleaseDate = new DateTime(2000, 1, 1, 0, 0, 0).ToUniversalTime() };
             var product2 = new Product { MerchantId = merchant1.Id, Name = "Sweet Tarts", Description = "Sweet and Sour", Category = "Candy", PriceInCents = 149, StockQuantity = 50, ReleaseDate = new DateTime(2000, 1, 1, 0, 0, 0).ToUniversalTime() };
-            var product3 = new Product { MerchantId = merchant1.Id, Name = "Slim Jims", Description = "Meat Stick", Category = "Snack", PriceInCents = 99, StockQuantity = 100, ReleaseDate = new DateTime(2000, 1, 1, 0, 0, 0).ToUniversalTime() };
+            var product3 = new Product { MerchantId = merchant1.Id, Name = "Arizona Iced Tea", Description = "Iced Tea", Category = "Drink", PriceInCents = 99, StockQuantity = 200, ReleaseDate = new DateTime(2000, 1, 1, 0, 0, 0).ToUniversalTime() };
             List<Product> products = new() { product1, product2, product3 };
             context.Products.AddRange(products);
             context.SaveChanges();
@@ -139,7 +139,7 @@ namespace CommerceAPITests.EndpointTests
 
             var product1 = new Product { MerchantId = merchant1.Id, Name = "Slim Jims", Description = "Meat Stick", Category = "Snack", PriceInCents = 99, StockQuantity = 100, ReleaseDate = new DateTime(2000, 1, 1, 0, 0, 0).ToUniversalTime() };
             var product2 = new Product { MerchantId = merchant1.Id, Name = "Sweet Tarts", Description = "Sweet and Sour", Category = "Candy", PriceInCents = 149, StockQuantity = 50, ReleaseDate = new DateTime(2000, 1, 1, 0, 0, 0).ToUniversalTime() };
-            var product3 = new Product { MerchantId = merchant1.Id, Name = "Slim Jims", Description = "Meat Stick", Category = "Snack", PriceInCents = 99, StockQuantity = 100, ReleaseDate = new DateTime(2000, 1, 1, 0, 0, 0).ToUniversalTime() };
+            var product3 = new Product { MerchantId = merchant1.Id, Name = "Arizona Iced Tea", Description = "Iced Tea", Category = "Drink", PriceInCents = 99, StockQuantity = 200, ReleaseDate = new DateTime(2000, 1, 1, 0, 0, 0).ToUniversalTime() };
             List<Product> products = new() { product1, product2, product3 };
             context.Products.AddRange(products);
             context.SaveChanges();
@@ -169,7 +169,7 @@ namespace CommerceAPITests.EndpointTests
 
             var product1 = new Product { MerchantId = merchant1.Id, Name = "Slim Jims", Description = "Meat Stick", Category = "Snack", PriceInCents = 99, StockQuantity = 100, ReleaseDate = new DateTime(2000, 1, 1, 0, 0, 0).ToUniversalTime() };
             var product2 = new Product { MerchantId = merchant1.Id, Name = "Sweet Tarts", Description = "Sweet and Sour", Category = "Candy", PriceInCents = 149, StockQuantity = 50, ReleaseDate = new DateTime(2000, 1, 1, 0, 0, 0).ToUniversalTime() };
-            var product3 = new Product { MerchantId = merchant1.Id, Name = "Slim Jims", Description = "Meat Stick", Category = "Snack", PriceInCents = 99, StockQuantity = 100, ReleaseDate = new DateTime(2000, 1, 1, 0, 0, 0).ToUniversalTime() };
+            var product3 = new Product { MerchantId = merchant1.Id, Name = "Arizona Iced Tea", Description = "Iced Tea", Category = "Drink", PriceInCents = 99, StockQuantity = 200, ReleaseDate = new DateTime(2000, 1, 1, 0, 0, 0).ToUniversalTime() };
             List<Product> products = new() { product1, product2, product3 };
             context.Products.AddRange(products);
             context.SaveChanges();

@@ -87,5 +87,24 @@ namespace CommerceAPI.Controllers
             Response.StatusCode = 204;
             return new JsonResult(product);
         }
+        [HttpDelete("{productId}")]
+        public ActionResult DeleteProduct(int merchantId, int productId)
+        {
+            var merchant = _context.Merchants.FirstOrDefault(m => m.Id == merchantId);
+            if (merchant == null)
+            {
+                return NotFound();
+            }
+            var product = _context.Products.Where(p => p.MerchantId == merchantId).FirstOrDefault(p => p.Id == productId);
+            if (product == null)
+            {
+                return NotFound();
+            }
+            _context.Products.Remove(product);
+            _context.SaveChanges();
+
+            Response.StatusCode = 204;
+            return new JsonResult(_context.Products.Where(p => p.MerchantId == merchantId));
+        }
     }
 }
