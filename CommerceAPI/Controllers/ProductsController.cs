@@ -25,7 +25,9 @@ namespace CommerceAPI.Controllers
         [HttpPost("merchants/{merchantId}/products")]
         public ActionResult<Product> PostProduct_CreatesProductInDb(Product product, int merchantId)
         {
-            _context.Merchants.Include(e => e.Products).Where(e => e.Id == merchantId).Single().Products.Add(product);
+            //var merchant = _context.Merchants.Find(merchantId);
+            //var product = _context.Products.Where(p => p.MerchantId == merchantId).FirstOrDefault(p => p.Id == productId);
+            //merchant.Products.Add(product);
             _context.SaveChanges();
 
             return product;
