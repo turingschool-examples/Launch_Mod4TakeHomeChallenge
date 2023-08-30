@@ -77,5 +77,28 @@ namespace CommerceAPI.Controllers
 
             return NoContent();
         }
+
+        [HttpDelete("{productId}")]
+        public ActionResult DeleteProductViaId(int merchantId, int productId)
+        {
+            var merchantWithProducts = _context.Merchants.Include(merch => merch.Products).FirstOrDefault(merch => merch.Id == merchantId);
+
+            if (merchantWithProducts == null)
+            {
+                return NotFound("Merchant not found");
+            }
+
+            var productFromMerchant = merchantWithProducts.Products.FirstOrDefault(product => product.Id == productId);
+
+            if (merchantWithProducts == null)
+            {
+                return NotFound("Product not found in the specified Merchant");
+            }
+
+            _context.Products.Remove(productFromMerchant);
+            _context.SaveChanges();
+
+            return NoContent();
+        }
     }
 }
