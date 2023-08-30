@@ -63,5 +63,29 @@ namespace CommerceAPI.Controllers
             Response.StatusCode = 201;
             return new JsonResult(product);
         }
+
+        [HttpPut("{productId}")]
+        public ActionResult UpdateProduct(int merchantId, int productId, Product update)
+        {
+            var merchant = _context.Merchants.FirstOrDefault(m => m.Id == merchantId);
+            if (merchant == null)
+            {
+                return NotFound();
+            }
+            var product = _context.Products.Where(p => p.MerchantId == merchantId).FirstOrDefault(p => p.Id == productId);
+            if (product == null)
+            {
+                return NotFound();
+            }
+            product.Name = update.Name;
+            product.Description = update.Description;
+            product.Category = update.Category;
+            product.PriceInCents = update.PriceInCents;
+            product.StockQuantity = update.StockQuantity;
+            _context.Products.Update(product);
+            _context.SaveChanges();
+            Response.StatusCode = 204;
+            return new JsonResult(product);
+        }
     }
 }
