@@ -11,6 +11,7 @@ namespace CommerceAPITests.ModelTests
 
             Assert.Equal("Biker Jim's", merchant.Name);
             Assert.Equal("Restaurant", merchant.Category);
+            Assert.Equal(new List<Product>(), merchant.Products);
         }
     }
 }
