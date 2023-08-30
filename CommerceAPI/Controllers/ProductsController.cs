@@ -21,10 +21,22 @@ namespace CommerceAPI.Controllers
             return _context.Products.Find(id);
         }
 
-        [HttpGet("products")]
-        public ActionResult<IEnumerable<Product>> GetProducts()
+        [HttpPost("merchants/{merchantId}/products")]
+        public ActionResult<Product> PostProduct_CreatesProductInDb(Product product, int merchantId)
         {
-            return _context.Products;
+            var merchant = _context.Merchants.Find(merchantId);
+            merchant.Products.Add(product);
+            _context.SaveChanges();
+
+            return product;
         }
+
+        //[HttpGet("products")]
+        //public ActionResult<IEnumerable<Product>> GetProducts()
+        //{
+        //    return _context.Products;
+        //}
+
+
     }
 }
