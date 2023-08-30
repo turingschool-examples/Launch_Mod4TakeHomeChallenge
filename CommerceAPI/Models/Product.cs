@@ -11,7 +11,7 @@ namespace CommerceAPI.Models
         public int PriceInCents { get; set; }
         public int StockQuantity { get; set; }
         public DateTime ReleaseDate { get; set; }
-        public Merchant Merchant { get; set; }
+        public int MerchantId { get; set; }
 
         public double PriceInDollars()
         {
