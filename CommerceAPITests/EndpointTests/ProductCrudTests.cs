@@ -10,6 +10,7 @@ using System.Text;
 
 namespace CommerceAPITests.EndpointTests
 {
+    [Collection("Controller Tests")]
     public class ProductCrudTests : IClassFixture<WebApplicationFactory<Program>>
     {
         private readonly WebApplicationFactory<Program> _factory;
@@ -37,6 +38,7 @@ namespace CommerceAPITests.EndpointTests
             var product3 = new Product { MerchantId = merchant1.Id, Name = "Slim Jims", Description = "Meat Stick", Category = "Snack", PriceInCents = 99, StockQuantity = 100, ReleaseDate = new DateTime(2000, 1, 1, 0, 0, 0).ToUniversalTime() };
             List<Product> products = new () { product1, product2, product3 };
             context.Products.AddRange(products);
+            context.SaveChanges();
 
             HttpResponseMessage response = await client.GetAsync($"/api/merchants/{merchant1.Id}/products");
             string content = await response.Content.ReadAsStringAsync();
@@ -68,7 +70,7 @@ namespace CommerceAPITests.EndpointTests
         {
             DefaultContractResolver contractResolver = new DefaultContractResolver
             {
-                NamingStrategy = new SnakeCaseNamingStrategy()
+                NamingStrategy = new CamelCaseNamingStrategy()
             };
 
             string json = JsonConvert.SerializeObject(obj, new JsonSerializerSettings
