@@ -7,7 +7,7 @@ namespace CommerceAPI.Controllers
 {
     [Route("/api/merchants/{merchantId}/[controller]")]
     [ApiController]
-    public class ProductsController : Controller
+    public class ProductsController : ControllerBase
     {
         private readonly CommerceApiContext _context;
         public ProductsController(CommerceApiContext context)
@@ -45,6 +45,22 @@ namespace CommerceAPI.Controllers
             }
 
             return Ok(productFromMerchant);
+        }
+
+        [HttpPost]
+        public ActionResult CreateProduct(int merchantId, Product product) 
+        {
+            var merchantWithProducts = _context.Merchants.Include(merch => merch.Products).FirstOrDefault(merch => merch.Id == merchantId);
+
+            if (merchantWithProducts == null)
+            {
+                return NotFound("Merchant not found");
+            }
+
+            merchantWithProducts.Products.Add(product);
+            _context.SaveChanges();
+
+            return Ok(product);
         }
 
         [HttpPut("{productId}")]
