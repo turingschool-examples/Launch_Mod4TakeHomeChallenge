@@ -10,6 +10,7 @@ using System.Text;
 
 namespace CommerceAPITests.EndpointTests
 {
+    [Collection("Commerce API Tests")]
     public class MerchantCrudTests : IClassFixture<WebApplicationFactory<Program>>
     {
         private readonly WebApplicationFactory<Program> _factory;
