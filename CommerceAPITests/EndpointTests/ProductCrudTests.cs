@@ -155,6 +155,32 @@ namespace CommerceAPITests.EndpointTests
             Assert.Equal("Cheese Its", context.Products.Find(1).Name);
         }
 
+        [Fact]
+        public async void DeleteProduct_DeletesProductWithGivenId()
+        {
+            var context = GetDbContext();
+            var client = _factory.CreateClient();
+
+            var merchant1 = new Merchant { Name = "Circle K", Category = "Convenience Store" };
+            var merchant2 = new Merchant { Name = "Biker Jim's", Category = "Restaurant" };
+            var merchants = new List<Merchant> { merchant1, merchant2 };
+            context.Merchants.AddRange(merchants);
+            context.SaveChanges();
+
+            var product1 = new Product { MerchantId = merchant1.Id, Name = "Slim Jims", Description = "Meat Stick", Category = "Snack", PriceInCents = 99, StockQuantity = 100, ReleaseDate = new DateTime(2000, 1, 1, 0, 0, 0).ToUniversalTime() };
+            var product2 = new Product { MerchantId = merchant1.Id, Name = "Sweet Tarts", Description = "Sweet and Sour", Category = "Candy", PriceInCents = 149, StockQuantity = 50, ReleaseDate = new DateTime(2000, 1, 1, 0, 0, 0).ToUniversalTime() };
+            var product3 = new Product { MerchantId = merchant1.Id, Name = "Slim Jims", Description = "Meat Stick", Category = "Snack", PriceInCents = 99, StockQuantity = 100, ReleaseDate = new DateTime(2000, 1, 1, 0, 0, 0).ToUniversalTime() };
+            List<Product> products = new() { product1, product2, product3 };
+            context.Products.AddRange(products);
+            context.SaveChanges();
+
+            HttpResponseMessage response = await client.DeleteAsync($"/api/merchants/{merchant1.Id}/products/{product1.Id}");
+            var content = await response.Content.ReadAsStringAsync();
+
+            Assert.Equal(204, (int)response.StatusCode);
+            Assert.DoesNotContain("Slim Jims", content);
+        }
+
         private CommerceApiContext GetDbContext()
         {
             var optionsBuilder = new DbContextOptionsBuilder<CommerceApiContext>();
