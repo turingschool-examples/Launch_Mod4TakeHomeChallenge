@@ -31,6 +31,24 @@ namespace CommerceAPI.Controllers
             return product;
         }
 
+        [HttpPut("merchants/{merchantId}/products/{productId}")]
+        public ActionResult<Product> PutProduct_UpdatesProductInDb(int productId, Product product)
+        {
+            var oldProduct = _context.Products.Find(productId);
+
+            oldProduct.Name = product.Name;
+            oldProduct.Description = product.Description;
+            oldProduct.Category = product.Category;
+            oldProduct.PriceInCents = product.PriceInCents;
+            oldProduct.StockQuantity = product.StockQuantity;
+            oldProduct.Merchant = product.Merchant;
+            _context.Products.Update(oldProduct);
+
+            _context.SaveChanges();
+
+            return oldProduct;
+        }
+
         //[HttpGet("products")]
         //public ActionResult<IEnumerable<Product>> GetProducts()
         //{
