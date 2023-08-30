@@ -1,5 +1,6 @@
 ﻿using CommerceAPI.DataAccess;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace CommerceAPI.Controllers
 {
@@ -11,6 +12,17 @@ namespace CommerceAPI.Controllers
         {
             _context = context;
         }
-       
+        [HttpGet]
+        public ActionResult GetProducts(int merchantId)
+        {
+            var merchantProducts = _context.Merchants.Include(m => m.Products).FirstOrDefault(m => m.Id == merchantId);
+
+            if (merchantProducts == null)
+            {
+                return NotFound("Product not found");
+            }
+
+            return Ok(merchantProducts.Products);
+        }
     }
 }
