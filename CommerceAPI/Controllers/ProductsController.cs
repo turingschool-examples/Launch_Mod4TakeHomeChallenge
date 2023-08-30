@@ -1,6 +1,7 @@
 ﻿using CommerceAPI.DataAccess;
 using Microsoft.AspNetCore.Mvc;
 using CommerceAPI.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace CommerceAPI.Controllers
 {
@@ -18,14 +19,13 @@ namespace CommerceAPI.Controllers
         [HttpGet("products/{productId}")]
         public ActionResult<Product> GetProduct_ReturnsSingleProduct(int productId)
         {
-            return _context.Products.Find(productId);
+            return _context.Products.Where(e => e.Id == productId).Include(e => e.Merchant).Single();
         }
 
         [HttpPost("merchants/{merchantId}/products")]
         public ActionResult<Product> PostProduct_CreatesProductInDb(Product product, int merchantId)
         {
-            var merchant = _context.Merchants.Find(merchantId);
-            merchant.Products.Add(product);
+            _context.Merchants.Include(e => e.Products).Where(e => e.Id == merchantId).Single().Products.Add(product);
             _context.SaveChanges();
 
             return product;

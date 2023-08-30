@@ -3,6 +3,7 @@ using System;
 using CommerceAPI.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CommerceAPI.Migrations
 {
     [DbContext(typeof(CommerceApiContext))]
-    partial class CommerceApiContextModelSnapshot : ModelSnapshot
+    [Migration("20230830204810_MakeMerchantNullableForProduct")]
+    partial class MakeMerchantNullableForProduct
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
