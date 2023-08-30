@@ -12,7 +12,7 @@ using CommerceAPI.Models;
 
 namespace CommerceAPITests.EndpointTests
 {
-    public class ProductCrudTests
+    public class ProductCrudTests : IClassFixture<WebApplicationFactory<Program>>
     {
         private readonly WebApplicationFactory<Program> _factory;
 
@@ -20,8 +20,32 @@ namespace CommerceAPITests.EndpointTests
         {
             _factory = factory;
         }
+        
+        [Fact]
+        public async void GetSpecificProductByPrimaryKey()
+        {
+            var context = GetDbContext();
+            var client = _factory.CreateClient();
 
+            var merchant1 = new Merchant { Name = "Biker Jim's", Category = "Restaurant" };
+            var merchant2 = new Merchant { Name = "REI", Category = "Outdoor" };
+            var merchants = new List<Merchant> { merchant1, merchant2 };
+            context.Merchants.AddRange(merchants);
+            var product1 = new Product { Name = "Burger", Category = "Beef", Description = "Tasty", Price = 12.99M, StockQuantity = 4 };
+            var product2 = new Product { Name = "Hot Dog", Category = "Mystery", Description = "Good", Price = 8.99M, StockQuantity = 3 };
+            var products = new List<Product> { product1, product2 };
+            context.Products.AddRange(products);
+            merchant1.Products.Add(product1);
+            merchant1.Products.Add(product2);
+            context.SaveChanges();
+            var response = await client.GetAsync($"/api/merchants/{merchant1.Id}/products/{product1.ProductId}");
+            var content = await response.Content.ReadAsStringAsync();
 
+            string expected = ObjectToJson(product1);
+
+            response.EnsureSuccessStatusCode();
+            Assert.Equal(expected, content);
+        }
 
 
 
@@ -44,7 +68,7 @@ namespace CommerceAPITests.EndpointTests
         {
             DefaultContractResolver contractResolver = new DefaultContractResolver
             {
-                NamingStrategy = new SnakeCaseNamingStrategy()
+                NamingStrategy = new CamelCaseNamingStrategy()
             };
 
             string json = JsonConvert.SerializeObject(obj, new JsonSerializerSettings

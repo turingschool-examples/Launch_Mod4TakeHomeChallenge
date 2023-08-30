@@ -14,5 +14,17 @@ namespace CommerceAPI.Controllers
         {
             _context = context;
         }
+
+        //Retrieve a product by its primary key
+        [HttpGet("{productId}")]
+        public ActionResult<Product> GetProduct(int productId)
+        {
+            return _context.Products.Find(productId);
+        }
+        //Create a new product associated with a specific merchant
+        
+        //Update an existing product
+
+        //Delete a product by its primary key
     }
 }
