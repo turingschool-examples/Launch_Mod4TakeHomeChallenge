@@ -104,7 +104,26 @@ namespace CommerceAPITests.EndpointTests
             Assert.Equal(expected, response.StatusCode);
         }
 
+        [Fact]
+        public async void PostProduct_CreatesProductInDb()
+        {
+            var context = GetDbContext();
+            var client = _factory.CreateClient();
 
+            var merchant = new Merchant { Name = "Circle K", Category = "Convenience Store" };
+            context.Merchants.Add(merchant);
+            context.SaveChanges();
+
+            string jsonString = "{\"Name\": \"Cheese Its\", \"Description\": \"Made With Real Cheese\", \"Category\": \"Snack\", \"PriceInCents\": \"299\", \"StockQuantity\": \"25\"}";
+            StringContent requestContent = new StringContent(jsonString, Encoding.UTF8, "application/json");
+
+            HttpResponseMessage response = await client.PostAsync($"/api/merchants/{merchant.Id}/products", requestContent);
+
+            Assert.Equal(201, (int)response.StatusCode);
+            var newProduct = context.Products.Last();
+
+            Assert.Equal("Cheese Its", newProduct.Name);
+        }
 
 
 
