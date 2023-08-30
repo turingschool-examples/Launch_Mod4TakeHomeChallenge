@@ -22,7 +22,7 @@
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
-      "launchUrl": "merchants",
+      "launchUrl": "api/merchants",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
