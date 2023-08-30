@@ -43,5 +43,25 @@ namespace CommerceAPI.Controllers
             }
             return new JsonResult(product);
         }
+
+        [HttpPost]
+        public ActionResult CreateProduct(int merchantId, Product product)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+            var merchant = _context.Merchants.FirstOrDefault(m => m.Id == merchantId);
+            if (merchant == null)
+            {
+                return NotFound();
+            }
+            product.ReleaseDate = DateTime.UtcNow;
+            product.MerchantId = merchantId;
+            _context.Products.Add(product);
+            _context.SaveChanges();
+            Response.StatusCode = 201;
+            return new JsonResult(product);
+        }
     }
 }
