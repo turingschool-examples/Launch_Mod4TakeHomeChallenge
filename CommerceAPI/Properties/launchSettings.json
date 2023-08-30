@@ -13,7 +13,7 @@
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,
-      "launchUrl": "merchants",
+      "launchUrl": "api/merchants",
       "applicationUrl": "https://localhost:7136;http://localhost:5164",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
@@ -22,7 +22,7 @@
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
-      "launchUrl": "merchants",
+      "launchUrl": "api/merchants",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
