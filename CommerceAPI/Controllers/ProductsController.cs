@@ -26,5 +26,25 @@ namespace CommerceAPI.Controllers
 
             return Ok(merchantWithProducts.Products);
         }
+
+        [HttpGet("{productId}")]
+        public ActionResult GetProductViaId(int merchantId, int productId)
+        {
+            var merchantWithProducts = _context.Merchants.Include(merch => merch.Products).FirstOrDefault(merch => merch.Id == merchantId);
+
+            if (merchantWithProducts == null)
+            {
+                return NotFound("Merchant not found");
+            }
+
+            var productFromMerchant = merchantWithProducts.Products.FirstOrDefault(product => product.Id == productId);
+
+            if (merchantWithProducts == null)
+            {
+                return NotFound("Product not found in the specified Merchant");
+            }
+
+            return Ok(productFromMerchant);
+        }
     }
 }
