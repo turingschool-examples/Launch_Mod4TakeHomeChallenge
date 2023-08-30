@@ -15,10 +15,10 @@ namespace CommerceAPI.Controllers
             _context = context;
         }
 
-        [HttpGet("products/{id}")]
-        public ActionResult<Product> GetProduct_ReturnsSingleProduct(int id)
+        [HttpGet("products/{productId}")]
+        public ActionResult<Product> GetProduct_ReturnsSingleProduct(int productId)
         {
-            return _context.Products.Find(id);
+            return _context.Products.Find(productId);
         }
 
         [HttpPost("merchants/{merchantId}/products")]
@@ -47,6 +47,14 @@ namespace CommerceAPI.Controllers
             _context.SaveChanges();
 
             return oldProduct;
+        }
+
+        [HttpDelete("products/{productId}")]
+        public string DeleteProduct_RemovesProductFromDb_AndMerchant(int productId)
+        {
+            _context.Products.Remove(_context.Products.Find(productId));
+
+            return "done.";
         }
 
         //[HttpGet("products")]
