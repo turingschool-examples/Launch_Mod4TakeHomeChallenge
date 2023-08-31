@@ -110,6 +110,36 @@ namespace CommerceAPITests.EndpointTests
 
 
 
+        [Fact]
+        public async void DeleteProduct_DeletesProduct()
+        {
+            var context = GetDbContext();
+            var client = _factory.CreateClient();
+
+            var merchant = new Merchant { Name = "Biker Jim's", Category = "Restaurant" };
+            context.Merchants.Add(merchant);
+            context.SaveChanges();
+
+            var product = new Product { MerchantId = merchant.Id, Name = "Dunkaroos", Description = "Discontinued", Category = "Snack", Price = 5.99M, StockQuantity = 100, ReleaseDate = new DateTime(2023, 1, 1, 0, 0, 0).ToUniversalTime() };
+            context.Products.Add(product);
+            context.SaveChanges();
+
+            HttpResponseMessage response = await client.DeleteAsync($"/api/merchants/{merchant.Id}/products/{product.ProductId}");
+            var content = await response.Content.ReadAsStringAsync(); 
+            
+            
+
+
+            response.EnsureSuccessStatusCode();
+
+            
+
+            Assert.DoesNotContain("Dunkaroos", content);
+
+        }
+
+
+
 
 
         private CommerceApiContext GetDbContext()

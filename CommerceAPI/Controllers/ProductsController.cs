@@ -99,5 +99,32 @@ namespace CommerceAPI.Controllers
 
 
 
+        [HttpDelete("{productId}")]
+        public ActionResult DeleteProduct(int productId, int MerchantId)
+        {
+
+            var merchant = _context.Merchants.FirstOrDefault(m => m.Id == MerchantId);
+
+            if (merchant == null)
+            {
+                return NotFound();
+            }
+
+            var product = _context.Products.Where(p => p.MerchantId == MerchantId).FirstOrDefault(p => p.ProductId == productId);
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            _context.Products.Remove(product);
+            _context.SaveChanges();
+
+
+
+            return NoContent();
+        }
+
+
+
     }
 }
