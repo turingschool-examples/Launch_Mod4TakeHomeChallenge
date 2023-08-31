@@ -27,6 +27,14 @@ namespace CommerceAPI.Controllers
 			return new JsonResult(merchant.Products);
 		}
 
+		[HttpGet]
+		[Route("/api/products/{productId:int}")]
+		public ActionResult GetProduct(int productId)
+		{
+			var product = _context.Products.Find(productId);
+			return new JsonResult(product);
+		}
+
 		[HttpPost]
 		public ActionResult CreateProduct(int merchantId, Product product)
 		{
