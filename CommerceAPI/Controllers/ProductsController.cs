@@ -27,9 +27,9 @@ namespace CommerceAPI.Controllers
         [HttpPost("merchants/{merchantId}/products")]
         public ActionResult<Product> PostProduct_CreatesProductInDb(Product product, int merchantId)
         {
-            //var merchant = _context.Merchants.Find(merchantId);
-            //var product = _context.Products.Where(p => p.MerchantId == merchantId).FirstOrDefault(p => p.Id == productId);
-            //merchant.Products.Add(product);
+            var merchant = _context.Merchants.FirstOrDefault(e => e.Id == merchantId);
+            merchant.Products.Add(product);
+            _context.Products.Add(product);
             _context.SaveChanges();
 
             return product;
@@ -45,7 +45,7 @@ namespace CommerceAPI.Controllers
             oldProduct.Category = product.Category;
             oldProduct.PriceInCents = product.PriceInCents;
             oldProduct.StockQuantity = product.StockQuantity;
-            //oldProduct.Merchant = product.Merchant;
+
             _context.Products.Update(oldProduct);
 
             _context.SaveChanges();
@@ -57,15 +57,16 @@ namespace CommerceAPI.Controllers
         public string DeleteProduct_RemovesProductFromDb_AndMerchant(int productId)
         {
             _context.Products.Remove(_context.Products.Find(productId));
+            _context.SaveChanges();
 
             return "done.";
         }
 
-        //[HttpGet("products")]
-        //public ActionResult<IEnumerable<Product>> GetProducts()
-        //{
-        //    return _context.Products;
-        //}
+        [HttpGet("products")]
+        public ActionResult<IEnumerable<Product>> GetProducts()
+        {
+            return _context.Products;
+        }
 
 
     }
