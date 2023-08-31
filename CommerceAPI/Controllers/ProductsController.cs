@@ -53,5 +53,20 @@ namespace CommerceAPI.Controllers
 			Response.StatusCode = 201;
 			return new JsonResult(product);
 		}
+
+		[HttpPut]
+		[Route("/api/products/{productId:int}")]
+		public ActionResult UpdateProduct(int productId, Product product)
+		{
+			if (!ModelState.IsValid)
+			{
+				return BadRequest();
+			}
+			product.ProductId = productId;
+			_context.Products.Update(product);
+			_context.SaveChanges();
+			Response.StatusCode = 204;
+			return new JsonResult(product);
+		}
 	}
 }
