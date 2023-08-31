@@ -38,7 +38,30 @@ namespace CommerceAPI.Controllers
             return new JsonResult(product);
         }
         //Update an existing product
-
+        [HttpPut("{productId}")]
+        public IActionResult UpdateProduct(int merchantId, int productId, Product product)
+        {
+            if(!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+            product.ProductId = productId;
+            product.MerchantId = merchantId;
+            _context.Products.Update(product);
+            _context.SaveChanges();
+            Response.StatusCode = 204;
+            return new JsonResult(product);
+        }
         //Delete a product by its primary key
+        [HttpDelete("{productId}")]
+        public ActionResult DeleteProduct(int merchantId, int productId)
+        {
+            var product = _context.Products.Find(productId);
+            _context.Products.Remove(product);
+            _context.SaveChanges();
+            Response.StatusCode = 204;
+
+            return new JsonResult(_context.Merchants.Where(m => m.Id == merchantId).Include(m => m.Products));
+        }
     }
 }
