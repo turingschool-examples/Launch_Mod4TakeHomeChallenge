@@ -16,11 +16,15 @@ namespace CommerceAPI.Controllers
             _context = context;
         }
 
+        [HttpGet("products")]
+        public ActionResult<IEnumerable<Product>> GetProducts()
+        {
+            return _context.Products;
+        }
+
         [HttpGet("products/{productId}")]
         public ActionResult<Product> GetProduct_ReturnsSingleProduct(int productId)
         {
-            
-            //return _context.Products.Where(e => e.Id == productId).Include(e => e.Merchant).Single();
             return _context.Products.Find(productId);
         }
 
@@ -47,7 +51,6 @@ namespace CommerceAPI.Controllers
             oldProduct.StockQuantity = product.StockQuantity;
 
             _context.Products.Update(oldProduct);
-
             _context.SaveChanges();
 
             return oldProduct;
@@ -61,13 +64,5 @@ namespace CommerceAPI.Controllers
 
             return "done.";
         }
-
-        [HttpGet("products")]
-        public ActionResult<IEnumerable<Product>> GetProducts()
-        {
-            return _context.Products;
-        }
-
-
     }
 }
