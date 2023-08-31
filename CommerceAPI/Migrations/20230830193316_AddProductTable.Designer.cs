@@ -3,6 +3,7 @@ using System;
 using CommerceAPI.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CommerceAPI.Migrations
 {
     [DbContext(typeof(CommerceApiContext))]
-    partial class CommerceApiContextModelSnapshot : ModelSnapshot
+    [Migration("20230830193316_AddProductTable")]
+    partial class AddProductTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -75,9 +78,9 @@ namespace CommerceAPI.Migrations
                         .HasColumnType("text")
                         .HasColumnName("name");
 
-                    b.Property<int>("PriceInCents")
-                        .HasColumnType("integer")
-                        .HasColumnName("price_in_cents");
+                    b.Property<decimal>("Price")
+                        .HasColumnType("numeric")
+                        .HasColumnName("price");
 
                     b.Property<DateTime>("ReleaseDate")
                         .HasColumnType("timestamp with time zone")
@@ -88,22 +91,24 @@ namespace CommerceAPI.Migrations
                         .HasColumnName("stock_quantity");
 
                     b.HasKey("Id")
-                        .HasName("pk_products");
+                        .HasName("pk_product");
 
                     b.HasIndex("MerchantId")
-                        .HasDatabaseName("ix_products_merchant_id");
+                        .HasDatabaseName("ix_product_merchant_id");
 
-                    b.ToTable("products", (string)null);
+                    b.ToTable("product", (string)null);
                 });
 
             modelBuilder.Entity("CommerceAPI.Models.Product", b =>
                 {
-                    b.HasOne("CommerceAPI.Models.Merchant", null)
+                    b.HasOne("CommerceAPI.Models.Merchant", "Merchant")
                         .WithMany("Products")
                         .HasForeignKey("MerchantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_products_merchants_merchant_id");
+                        .HasConstraintName("fk_product_merchants_merchant_id");
+
+                    b.Navigation("Merchant");
                 });
 
             modelBuilder.Entity("CommerceAPI.Models.Merchant", b =>
