@@ -16,10 +16,19 @@ namespace CommerceAPI.Controllers
             _context = context;
         }
 
+        //[HttpGet]
+        //public ActionResult<IEnumerable<Merchant>> GetMerchants()
+        //{
+        //    return _context.Merchants;
+        //}
         [HttpGet]
-        public ActionResult<IEnumerable<Merchant>> GetMerchants()
+        public ActionResult GetMerchants()
         {
-            return _context.Merchants;
+            var merchants = _context.Merchants
+                .Include(m => m.Products)
+                .AsEnumerable();
+
+            return new JsonResult(merchants);
         }
 
         [HttpPost]
