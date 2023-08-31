@@ -11,7 +11,7 @@
         public DateTime ReleaseDate { get; set; }
         public int MerchantId { get; set; } 
 
-        public Merchant? Merchant { get; set;}
+       // public Merchant? Merchant { get; set;}
 
         
     }
