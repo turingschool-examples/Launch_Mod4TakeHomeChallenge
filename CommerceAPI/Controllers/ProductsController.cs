@@ -19,7 +19,9 @@ namespace CommerceAPI.Controllers
         [HttpGet("products/{productId}")]
         public ActionResult<Product> GetProduct_ReturnsSingleProduct(int productId)
         {
-            return _context.Products.Where(e => e.Id == productId).Include(e => e.Merchant).Single();
+            
+            //return _context.Products.Where(e => e.Id == productId).Include(e => e.Merchant).Single();
+            return _context.Products.Find(productId);
         }
 
         [HttpPost("merchants/{merchantId}/products")]
@@ -43,7 +45,7 @@ namespace CommerceAPI.Controllers
             oldProduct.Category = product.Category;
             oldProduct.PriceInCents = product.PriceInCents;
             oldProduct.StockQuantity = product.StockQuantity;
-            oldProduct.Merchant = product.Merchant;
+            //oldProduct.Merchant = product.Merchant;
             _context.Products.Update(oldProduct);
 
             _context.SaveChanges();
