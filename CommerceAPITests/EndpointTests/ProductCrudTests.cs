@@ -76,7 +76,7 @@ namespace CommerceAPITests.EndpointTests
         }
 
         [Fact]
-        public async void Test_CreatesProductinDB()
+        public async void Test_CreatesProductInDB()
         {
             var context = GetDbContext();
             var client = _factory.CreateClient();
@@ -115,9 +115,41 @@ namespace CommerceAPITests.EndpointTests
             var requestContent = new StringContent(jsonString, Encoding.UTF8, "application/json");
             var response = await client.PutAsync($"/api/merchants/{merchant1.Id}/products/{product1.Id}", requestContent);
 
-            Assert.Equal("Coffee Maker", context.Products.FirstOrDefault(p => p.Id == product1.Id).Name);
+            context.Entry(product1).Reload();
+            var updatedProduct = context.Products.FirstOrDefault(p => p.Id == product1.Id);
+
+            Assert.NotNull(updatedProduct);
+            Assert.Equal("Coffee Maker", updatedProduct.Name);
+            Assert.Equal("Brews up to 12 cups", updatedProduct.Description);
         }
 
+        [Fact]
+        public async Task Test_DeleteProductInDB()
+        {
+            // Arrange
+            var TimeDateToUse = DateTime.Now;
+            Merchant merchant1 = new Merchant { Name = "Merchant Man", Category = "Online" };
+
+            Product product1 = new Product { Name = "Product1", Category = "Product", Description = "a product", Price = 100, ReleaseDate = TimeDateToUse, StockQuanity = 10, MerchantId = 1 };
+            Product product2 = new Product { Name = "Product2", Category = "Product", Description = "a second product", Price = 100, ReleaseDate = TimeDateToUse, StockQuanity = 10, MerchantId = 1 };
+
+            var context = GetDbContext();
+
+            context.Merchants.Add(merchant1);
+            context.Products.AddRange(product1, product2);
+            context.SaveChanges();
+
+            var client = _factory.CreateClient();
+
+            // Act
+            var response = await client.DeleteAsync($"/api/merchants/{merchant1.Id}/products/{product1.Id}");
+
+            // Assert
+            var deletedProduct = context.Products.FirstOrDefault(p => p.Id == product1.Id);
+
+            Assert.Null(deletedProduct);
+        }
+        
         private string ObjectToJson(object obj)
         {
             DefaultContractResolver contractResolver = new DefaultContractResolver

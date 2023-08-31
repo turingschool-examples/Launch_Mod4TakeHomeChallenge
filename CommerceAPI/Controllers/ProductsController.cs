@@ -75,7 +75,7 @@ namespace CommerceAPI.Controllers
 
             var productFromMerchant = merchantWithProducts.Products.FirstOrDefault(product => product.Id == productId);
 
-            if (merchantWithProducts == null)
+            if (productFromMerchant == null)
             {
                 return NotFound("Product not found in the specified Merchant");
             }
@@ -89,9 +89,10 @@ namespace CommerceAPI.Controllers
             productFromMerchant.MerchantId = merchantId;
 
             _context.Products.Update(productFromMerchant);
+
             _context.SaveChanges();
 
-            return NoContent();
+            return Ok(productFromMerchant);
         }
 
         [HttpDelete("{productId}")]
