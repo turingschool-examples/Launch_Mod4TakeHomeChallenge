@@ -3,6 +3,7 @@ using System;
 using CommerceAPI.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CommerceAPI.Migrations
 {
     [DbContext(typeof(CommerceApiContext))]
-    partial class CommerceApiContextModelSnapshot : ModelSnapshot
+    [Migration("20230831144301_UpdateModels")]
+    partial class UpdateModels
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -90,25 +93,7 @@ namespace CommerceAPI.Migrations
                     b.HasKey("Id")
                         .HasName("pk_products");
 
-                    b.HasIndex("MerchantId")
-                        .HasDatabaseName("ix_products_merchant_id");
-
                     b.ToTable("products", (string)null);
-                });
-
-            modelBuilder.Entity("CommerceAPI.Models.Product", b =>
-                {
-                    b.HasOne("CommerceAPI.Models.Merchant", null)
-                        .WithMany("Products")
-                        .HasForeignKey("MerchantId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_products_merchants_merchant_id");
-                });
-
-            modelBuilder.Entity("CommerceAPI.Models.Merchant", b =>
-                {
-                    b.Navigation("Products");
                 });
 #pragma warning restore 612, 618
         }
