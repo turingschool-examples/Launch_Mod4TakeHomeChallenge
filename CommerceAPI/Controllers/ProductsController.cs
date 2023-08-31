@@ -22,7 +22,12 @@ namespace CommerceAPI.Controllers
 			var merchant = _context.Merchants
 				.Where(m => m.Id == merchantId)
 				.Include(m => m.Products)
-				.FirstOrDefault();
+				.First();
+
+			if(merchant is null)
+			{
+				return NotFound();
+			}
 
 			return new JsonResult(merchant.Products);
 		}
@@ -32,6 +37,10 @@ namespace CommerceAPI.Controllers
 		public ActionResult GetProduct(int productId)
 		{
 			var product = _context.Products.Find(productId);
+			if(product is null)
+			{
+				return NotFound();
+			}
 			return new JsonResult(product);
 		}
 
@@ -67,6 +76,21 @@ namespace CommerceAPI.Controllers
 			_context.SaveChanges();
 			Response.StatusCode = 204;
 			return new JsonResult(product);
+		}
+
+		[HttpDelete]
+		[Route("/api/products/{productId:int}")]
+		public ActionResult DeleteProduct(int productId)
+		{
+			var product = _context.Products.Find(productId);
+			if(product is null)
+			{
+				return NotFound();
+			}
+			_context.Products.Remove(product);
+			_context.SaveChanges();
+			Response.StatusCode = 204;
+			return new JsonResult(_context.Products);
 		}
 	}
 }
