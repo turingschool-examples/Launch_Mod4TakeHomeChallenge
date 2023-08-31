@@ -67,6 +67,10 @@ namespace CommerceAPI.Controllers
         [HttpPut("{productId}")]
         public ActionResult UpdateProduct(int merchantId, int productId, Product update)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
             var merchant = _context.Merchants.FirstOrDefault(m => m.Id == merchantId);
             if (merchant == null)
             {
