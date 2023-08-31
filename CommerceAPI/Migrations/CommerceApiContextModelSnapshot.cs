@@ -98,14 +98,12 @@ namespace CommerceAPI.Migrations
 
             modelBuilder.Entity("CommerceAPI.Models.Product", b =>
                 {
-                    b.HasOne("CommerceAPI.Models.Merchant", "Merchant")
+                    b.HasOne("CommerceAPI.Models.Merchant", null)
                         .WithMany("Products")
                         .HasForeignKey("MerchantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_products_merchants_merchant_id");
-
-                    b.Navigation("Merchant");
                 });
 
             modelBuilder.Entity("CommerceAPI.Models.Merchant", b =>
