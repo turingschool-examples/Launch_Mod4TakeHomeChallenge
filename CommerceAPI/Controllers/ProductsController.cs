@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CommerceAPI.Controllers
 {
-    [Route("/api/[controller]")]
+    [Route("/api/merchants/{merchantId:int}/[controller]")]
     [ApiController]
     public class ProductsController : ControllerBase
     {
@@ -17,26 +17,31 @@ namespace CommerceAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Product>> CreateProductAsync(Product product)
+        
+        public ActionResult CreateProduct(Product product, int MerchantId)
         {
-            // Check if the associated merchant exists
-            var merchant = await _context.Merchants.FindAsync(product.MerchantId);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            var merchant = _context.Merchants.FirstOrDefault(m => m.Id == MerchantId);
 
             if (merchant == null)
             {
-                return BadRequest("Merchant does not exist.");
+                return NotFound();
             }
 
-            // Associate the product with the merchant
-            product.Merchant = merchant;
+            product.MerchantId = MerchantId;
 
-            // Add the product to the context and save changes
+            product.ReleaseDate = DateTime.UtcNow;
+
             _context.Products.Add(product);
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
 
             Response.StatusCode = 201;
+
             return new JsonResult(product);
-         //   return CreatedAtAction("GetProduct", new { id = product.ProductId }, product);
         }
 
         
