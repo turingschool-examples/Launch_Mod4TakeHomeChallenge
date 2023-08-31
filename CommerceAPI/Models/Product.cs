@@ -1,4 +1,6 @@
-﻿namespace CommerceAPI.Models
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace CommerceAPI.Models
 {
     public class Product
     {
