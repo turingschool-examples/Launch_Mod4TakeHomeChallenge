@@ -47,6 +47,29 @@ namespace CommerceAPITests.EndpointTests
             Assert.Equal(expected, content);
         }
 
+        [Fact]
+        public async void Post_CreatesNewProduct()
+        {
+            CommerceApiContext context = GetDbContext();
+
+            HttpClient client = _factory.CreateClient();
+            string jsonString = "{\"Id\": 1, \"Name\": \"Coffee Maker\", \"Description\": \"Brews up to 12 cups\", \"Category\": \"Home Appliances\", \"Price\": 1100, \"StockQuantity\": 20, \"ReleaseDate\": \"2023-03-01T00:00:00.000Z\", \"MerchantId\": 1}";
+            StringContent requestContent = new StringContent(jsonString, Encoding.UTF8, "application/json");
+            var merchant1 = new Merchant { Name = "Biker Jim's", Category = "Restaurant" };
+            context.Merchants.Add(merchant1);
+            context.SaveChanges();
+
+            HttpResponseMessage response = await client.PostAsync($"/api/merchants/{merchant1.Id}/products", requestContent);
+
+            Assert.Equal("Created", response.StatusCode.ToString());
+            Assert.Equal(201, (int)response.StatusCode);
+
+            var newProduct = context.Products.Last();
+
+            Assert.Equal(1100, newProduct.Price);
+            Assert.Equal(1, newProduct.MerchantId);
+        }
+
 
 
 

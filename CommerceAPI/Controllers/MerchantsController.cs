@@ -19,7 +19,7 @@ namespace CommerceAPI.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<Merchant>> GetMerchants()
         {
-            return _context.Merchants;
+            return new JsonResult(_context.Merchants.Include(m => m.Products));
         }
 
         [HttpPost]
