@@ -112,5 +112,29 @@ namespace CommerceAPITests.EndpointTests
 			Assert.Equal("Coffee Maker", newProduct.Name);
 			Assert.Equal(merchant.Id, newProduct.MerchantId);
 		}
+
+		[Fact]
+		public async void UpdateProduct_UpdatesProductInDb()
+		{
+			var merchant = new Merchant { Name = "Acme", Category = "Everything" };
+			var product1 = new Product { Name = "Anvil", Category = "Anti-Roadrunner Tech", Description = "A large anvil", PriceInCents = 24999, ReleaseDate = DateTime.Now, StockQuantity = 3 };
+			var product2 = new Product { Name = "Coffee Maker", Category = "Home Appliances", Description = "Brews up to 12 cups then breaks", PriceInCents = 11500, ReleaseDate = DateTime.Now, StockQuantity = 20 };
+			merchant.Products.Add(product1);
+			merchant.Products.Add(product2);
+
+			var context = GetDbContext();
+			context.Merchants.Add(merchant);
+			context.SaveChanges();
+
+			var client = _factory.CreateClient();
+			string jsonString = "{\"Name\": \"Electric Guitar\", \"Description\": \"Totally Shreds\", \"Category\": \"Musical Instruments\", \"Price\": 50000, \"StockQuantity\": 1, \"ReleaseDate\": \"2023-05-25T00:00:00.000Z\", \"MerchantId\": 1}";
+			StringContent requestContent = new StringContent(jsonString, Encoding.UTF8, "application/json");
+			var response = await client.PutAsync($"/api/products/{product2.ProductId}", requestContent);
+
+			context.ChangeTracker.Clear();
+
+			Assert.Equal(204, (int)response.StatusCode);
+			Assert.Equal("Electric Guitar", context.Products.Find(product2.ProductId).Name);
+		}
 	}
 }
