@@ -10,6 +10,7 @@ using System.Text;
 
 namespace CommerceAPITests.EndpointTests
 {
+    [Collection("Controller Tests")]
     public class MerchantCrudTests : IClassFixture<WebApplicationFactory<Program>>
     {
         private readonly WebApplicationFactory<Program> _factory;
@@ -25,7 +26,7 @@ namespace CommerceAPITests.EndpointTests
             var context = GetDbContext();
             var client = _factory.CreateClient();
 
-            var merchant1 = new Merchant { Name = "Biker Jim's", Category = "Restaurant" };
+            var merchant1 = new Merchant { Name = "Biker Jims", Category = "Restaurant" };
             var merchant2 = new Merchant { Name = "REI", Category = "Outdoor" };
             var merchants = new List<Merchant> { merchant1, merchant2 };
             context.Merchants.AddRange(merchants);
