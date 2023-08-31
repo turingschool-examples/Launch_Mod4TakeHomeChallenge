@@ -12,4 +12,4 @@
         public int MerchantId { get; set; }
 
     }
-}
+ }
