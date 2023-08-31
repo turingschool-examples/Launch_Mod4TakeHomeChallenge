@@ -2,6 +2,7 @@
 using CommerceAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace CommerceAPI.Controllers
 {
@@ -44,6 +45,59 @@ namespace CommerceAPI.Controllers
             return new JsonResult(product);
         }
 
-        
+
+
+
+        [HttpGet("{productId}")]
+        public ActionResult GetProductById(int productId, int MerchantId)
+        {
+            
+            var merchant = _context.Merchants.FirstOrDefault(m => m.Id == MerchantId);
+
+            if (merchant == null)
+            {
+                return NotFound();
+            }
+
+            var product = _context.Products.Where(p => p.MerchantId == MerchantId).FirstOrDefault(p => p.ProductId == productId);
+
+            return new JsonResult(product);
+        }
+
+
+
+
+        [HttpPut("{productId}")]
+        public ActionResult UpdateProduct(int productId, int MerchantId, Product updatedProduct)
+        {
+
+            var merchant = _context.Merchants.FirstOrDefault(m => m.Id == MerchantId);
+
+            if (merchant == null)
+            {
+                return NotFound();
+            }
+
+            var product = _context.Products.Where(p => p.MerchantId == MerchantId).FirstOrDefault(p => p.ProductId == productId);
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            product.Name = updatedProduct.Name;
+            product.Description = updatedProduct.Description;
+            product.Category = updatedProduct.Category;
+            product.Price = updatedProduct.Price;
+            product.StockQuantity = updatedProduct.StockQuantity;
+            _context.Products.Update(product);
+            _context.SaveChanges();
+            Response.StatusCode = 204;
+
+            return new JsonResult(product);
+        }
+
+
+
+
     }
 }
