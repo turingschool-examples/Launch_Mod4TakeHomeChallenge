@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Testing;
 using CommerceAPI.Models;
+using System.Xml.Linq;
 
 namespace CommerceAPITests.EndpointTests
 {
@@ -68,6 +69,35 @@ namespace CommerceAPITests.EndpointTests
 
             Assert.Equal(1100, newProduct.Price);
             Assert.Equal(1, newProduct.MerchantId);
+        }
+        
+        [Fact]
+        public async void PutShelters_UpdatesShelterInDB()
+        {
+            var context = GetDbContext();
+
+            var merchant1 = new Merchant { Name = "Biker Jim's", Category = "Restaurant" };
+            var merchant2 = new Merchant { Name = "REI", Category = "Outdoor" };
+            var merchants = new List<Merchant> { merchant1, merchant2 };
+            context.Merchants.AddRange(merchants);
+            var product1 = new Product { ProductId = 1, Name = "Coffee Maker", Description = "Brews up to 12 cups then breaks", Category = "Home Appliances", Price = 1100, StockQuantity = 20, ReleaseDate = DateTime.Now, MerchantId = 1};
+            var product2 = new Product { ProductId = 2, Name = "Hot Dog", Category = "Mystery", Description = "Good", Price = 8.99M, StockQuantity = 3 };
+            var products = new List<Product> { product1, product2 };
+            context.Products.AddRange(products);
+            merchant1.Products.Add(product1);
+            merchant1.Products.Add(product2);
+            context.SaveChanges();
+
+            HttpClient client = _factory.CreateClient();
+            string jsonString = "{\"Id\": 1, \"Name\": \"Coffee Maker 2.0\", \"Description\": \"Brews up to 24 cups\", \"Category\": \"Home Appliances\", \"Price\": 1100, \"StockQuantity\": 50, \"ReleaseDate\": \"2023-03-01T00:00:00.000Z\", \"MerchantId\": 1}";
+            var requestContent = new StringContent(jsonString, Encoding.UTF8, "application/json");
+            var response = await client.PutAsync("/api/merchants/1/products/1", requestContent);
+
+            // Clear all previously tracked DB objects to get a new copy of the updated book
+            context.ChangeTracker.Clear();
+
+            Assert.Equal(204, (int)response.StatusCode);
+            Assert.Equal("Coffee Maker 2.0", context.Products.Find(1).Name);
         }
 
         [Fact]
