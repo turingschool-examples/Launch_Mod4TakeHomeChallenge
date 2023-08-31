@@ -136,5 +136,30 @@ namespace CommerceAPITests.EndpointTests
 			Assert.Equal(204, (int)response.StatusCode);
 			Assert.Equal("Electric Guitar", context.Products.Find(product2.ProductId).Name);
 		}
+
+		[Fact]
+		public async void DeleteProduct_RemovesProductFromDb()
+		{
+			var merchant = new Merchant { Name = "Acme", Category = "Everything" };
+			var product1 = new Product { Name = "Anvil", Category = "Anti-Roadrunner Tech", Description = "A large anvil", PriceInCents = 24999, ReleaseDate = DateTime.Now, StockQuantity = 3 };
+			var product2 = new Product { Name = "Coffee Maker", Category = "Home Appliances", Description = "Brews up to 12 cups then breaks", PriceInCents = 11500, ReleaseDate = DateTime.Now, StockQuantity = 20 };
+			merchant.Products.Add(product1);
+			merchant.Products.Add(product2);
+
+			var context = GetDbContext();
+			context.Merchants.Add(merchant);
+			context.SaveChanges();
+
+			var client = _factory.CreateClient();
+			var response = await client.DeleteAsync($"/api/products/{product2.ProductId}");
+			var content = await response.Content.ReadAsStringAsync();
+
+			var expected = ObjectToJson(product1);
+			var deleted = ObjectToJson(product2);
+
+			Assert.Equal(204, (int)response.StatusCode);
+			Assert.Contains(expected, content);
+			Assert.DoesNotContain(deleted, content);
+		}
 	}
 }
