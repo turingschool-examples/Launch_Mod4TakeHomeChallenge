@@ -70,7 +70,34 @@ namespace CommerceAPITests.EndpointTests
             Assert.Equal(1, newProduct.MerchantId);
         }
 
+        [Fact]
+        public async void DeleteProduct_RemovesProductFromDB()
+        {
+            //Arrange
+            var context = GetDbContext();
 
+            var merchant1 = new Merchant { Name = "Biker Jim's", Category = "Restaurant" };
+            var merchant2 = new Merchant { Name = "REI", Category = "Outdoor" };
+            var merchants = new List<Merchant> { merchant1, merchant2 };
+            context.Merchants.AddRange(merchants);
+            var product1 = new Product { Name = "Burger", Category = "Beef", Description = "Tasty", Price = 12.99M, StockQuantity = 4 };
+            var product2 = new Product { Name = "Hot Dog", Category = "Mystery", Description = "Good", Price = 8.99M, StockQuantity = 3 };
+            var products = new List<Product> { product1, product2 };
+            context.Products.AddRange(products);
+            merchant1.Products.Add(product1);
+            merchant1.Products.Add(product2);
+            context.SaveChanges();
+            HttpClient client = _factory.CreateClient();
+
+            //Act
+            HttpResponseMessage response = await client.DeleteAsync($"/api/merchants/{merchant1.Id}/products/{product1.ProductId}");
+            string content = await response.Content.ReadAsStringAsync();
+
+            //Assert
+            response.EnsureSuccessStatusCode();
+            Assert.Equal(1, context.Products.Where(p => p.MerchantId == 1).Count());
+            Assert.Equal("Hot Dog", context.Products.First().Name);
+        }
 
 
 
